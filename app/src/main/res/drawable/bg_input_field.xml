@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Focus olunca (tıklayınca) -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="16dp" />
+            <solid android:color="#12FFFFFF" />
+
+            <!-- vurgu çerçeve -->
+            <stroke
+                android:width="2dp"
+                android:color="@color/colorAccent" />
+
+            <padding
+                android:left="18dp"
+                android:top="14dp"
+                android:right="18dp"
+                android:bottom="14dp" />
+        </shape>
+    </item>
+
+    <!-- Normal hali -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="16dp" />
+            <solid android:color="#0FFFFFFF" />
+
+            <!-- normal çerçeve -->
+            <stroke
+                android:width="1.5dp"
+                android:color="#40FFFFFF" />
+
+            <padding
+                android:left="18dp"
+                android:top="14dp"
+                android:right="18dp"
+                android:bottom="14dp" />
+        </shape>
+    </item>
+
+</selector>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Altta gölge gibi duran koyu tabaka -->
+    <item android:top="3dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="28dp"/>
+            <solid android:color="#33000000"/>
+        </shape>
+    </item>
+
+    <!-- Üstte senin asıl buton rengin -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="28dp"/>
+            <!-- Burayı ister colorAccent ister koyu bir ton yap -->
+            <solid android:color="@color/colorAccent"/>
+        </shape>
+    </item>
+
+</layer-list>

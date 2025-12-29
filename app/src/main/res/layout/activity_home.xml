@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main_gradient"
+    tools:context=".HomeActivity">
+
+    <!-- Tüm ekran dalga/pattern (arka plan) -->
+    <ImageView
+        android:id="@+id/ivWaveHeader"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_wave_header"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+    <!-- Üst başlık satırı -->
+    <LinearLayout
+        android:id="@+id/linearLayoutHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="22dp"
+        android:paddingEnd="22dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tvBaslik"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="YurtDolap"
+            android:textColor="@color/textPrimary"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/btnCikisYap"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@android:drawable/ic_lock_power_off"
+            app:tint="@color/textPrimary"/>
+    </LinearLayout>
+
+    <!-- Kategoriler -->
+    <HorizontalScrollView
+        android:id="@+id/scrollKategoriler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="6dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnKatHepsi"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_pill_accent"
+                android:text="Hepsi"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/btnKatGiyim"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_pill_dark"
+                android:text="Giyim"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btnKatAksesuar"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_pill_dark"
+                android:text="Aksesuar"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btnKatKitap"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_pill_dark"
+                android:text="Kitap"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btnKatElektronik"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_pill_dark"
+                android:text="Elektronik"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- ✅ İLANLAR LİSTESİ (RecyclerView) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="90dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/scrollKategoriler"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_ilan"/>
+
+    <include
+        android:id="@+id/altBar"
+        layout="@layout/view_alt_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

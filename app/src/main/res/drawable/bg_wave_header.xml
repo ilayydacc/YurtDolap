@@ -1,0 +1,64 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="260dp"
+    android:viewportWidth="360"
+    android:viewportHeight="260">
+
+    <!-- Üst alan rengi: SENİN RENK -->
+    <path
+        android:fillColor="@color/palet_2_koyu_gri"
+        android:pathData="M0,0 H360 V260 H0 Z"/>
+
+    <!-- Topografik desen çizgileri (çok hafif) -->
+    <path
+        android:fillColor="#10FFFFFF"
+        android:pathData="M-10,35
+            C30,8 70,65 110,35
+            C150,8 190,65 230,35
+            C270,8 310,65 350,35
+            L350,0 L-10,0 Z"/>
+
+    <path
+        android:fillColor="#0CFFFFFF"
+        android:pathData="M0,80
+            C40,50 80,110 120,80
+            C160,50 200,110 240,80
+            C280,50 320,105 360,75
+            L360,55
+            C320,75 280,30 240,55
+            C200,80 160,25 120,55
+            C80,85 40,40 0,65 Z"/>
+
+    <path
+        android:fillColor="#0AFFFFFF"
+        android:pathData="M10,125
+            C55,100 95,145 145,120
+            C195,95 235,145 285,115
+            C315,97 338,115 360,107
+            L360,92
+            C330,107 310,82 275,97
+            C235,112 200,72 160,95
+            C120,117 80,89 45,107
+            C25,117 15,122 10,124 Z"/>
+
+    <!-- Beyaz dalga -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M0,160
+            C55,130 100,175 150,155
+            C205,135 235,110 285,125
+            C325,137 342,155 360,148
+            L360,260 L0,260 Z"/>
+
+    <!-- Dalga gölgesi (derinlik) -->
+    <path
+        android:fillColor="#12000000"
+        android:pathData="M0,160
+            C55,130 100,175 150,155
+            C205,135 235,110 285,125
+            C325,137 342,155 360,148
+            L360,170
+            C330,178 312,165 285,152
+            C240,132 205,165 150,172
+            C100,180 55,155 0,180 Z"/>
+</vector>

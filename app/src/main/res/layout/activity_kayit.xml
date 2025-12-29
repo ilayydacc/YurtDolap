@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main_gradient"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_glass_card"
+            android:orientation="vertical"
+            android:padding="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hesap Oluştur"
+                android:textColor="@color/textPrimary"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp"/>
+
+            <EditText
+                android:id="@+id/etAdSoyad"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="Ad Soyad"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="24dp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/text_hint"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etKayitEmail"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="E-posta"
+                android:inputType="textEmailAddress"
+                android:paddingHorizontal="24dp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/text_hint"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etKayitSifre"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="Şifre"
+                android:inputType="textPassword"
+                android:paddingHorizontal="24dp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/text_hint"
+                android:layout_marginBottom="24dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Şehir / Üniversite / Yurt Seçimi"
+                android:textColor="@color/textSecondary"
+                android:layout_marginBottom="8dp"/>
+
+            <Spinner
+                android:id="@+id/spinnerSehir"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:layout_marginBottom="10dp"/>
+            <Spinner
+                android:id="@+id/spinnerUniversite"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:layout_marginBottom="10dp"/>
+            <Spinner
+                android:id="@+id/spinnerYurt"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:layout_marginBottom="24dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnKayitOl"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_gradient_button"
+                android:text="Kayıt Ol"
+                android:textColor="@color/textPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp"/>
+
+            <TextView
+                android:id="@+id/tvGirisYap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Zaten hesabın var mı? Giriş Yap"
+                android:textColor="@color/textSecondary"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Seçili -->
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="999dp"/>
+            <solid android:color="@color/colorAccent"/>
+        </shape>
+    </item>
+
+    <!-- Seçili değil -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="999dp"/>
+            <!-- daha koyu görünmesi için -->
+            <solid android:color="@color/palet_2_koyu_gri"/>
+        </shape>
+    </item>
+
+</selector>

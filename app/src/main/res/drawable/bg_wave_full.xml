@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Arka planın üstüne hafif desen -->
+    <item>
+        <shape>
+            <solid android:color="@android:color/transparent"/>
+        </shape>
+    </item>
+
+    <!-- Üst pembe alan -->
+    <item android:top="-1dp">
+        <shape>
+            <gradient
+                android:startColor="@color/colorAccent"
+                android:endColor="@color/colorAccent"
+                android:angle="90"/>
+        </shape>
+    </item>
+
+    <!-- Beyaz dalga (üstten aşağı doğru) -->
+    <item>
+        <shape>
+            <corners android:radius="0dp"/>
+            <solid android:color="@android:color/transparent"/>
+        </shape>
+    </item>
+
+</layer-list>

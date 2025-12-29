@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_main_gradient">
+
+    <!-- Dalga + desen tüm ekranda -->
+    <ImageView
+        android:id="@+id/ivWaveHeader"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_wave_header"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- İçerik: form aşağıda dursun -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Üst boşluk (dalga alanı) -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="210dp" />
+
+            <!-- FORM -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yurt Dolap"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="28sp"
+                    android:textStyle="bold"/>
+
+                <View
+                    android:layout_width="56dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="18dp"
+                    android:background="@color/colorAccent"/>
+
+                <!-- Email label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="E-posta"
+                    android:textColor="@color/textSecondary"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp"/>
+
+                <!-- Email input -->
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="E-posta"
+                    android:inputType="textEmailAddress"
+                    android:paddingHorizontal="18dp"
+                    android:textColor="@color/textSecondary"
+                    android:textColorHint="@color/textSecondary"
+                    android:textSize="16sp"
+                    android:singleLine="true" />
+
+                <!-- Password label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Şifre"
+                    android:textColor="@color/textSecondary"
+                    android:textStyle="bold"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="6dp"/>
+
+                <!-- Password input -->
+                <EditText
+                    android:id="@+id/etSifre"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="Şifre"
+                    android:inputType="textPassword"
+                    android:paddingHorizontal="18dp"
+                    android:textColor="@color/textSecondary"
+                    android:textColorHint="@color/textSecondary"
+                    android:textSize="16sp"
+                    android:singleLine="true" />
+
+                <!-- Remember / Forgot -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/cbRemember"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Beni Hatırla"
+                        android:textColor="@color/textSecondary"/>
+
+                    <TextView
+                        android:id="@+id/tvForgot"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="Şifrenizi mi unuttunuz?"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- Login -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnGiris"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:layout_marginTop="18dp"
+                    android:background="@drawable/bg_gradient_button"
+                    android:text="Giriş Yap"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <!-- Sign up -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hesabınız yok mu? "
+                        android:textColor="@color/textSecondary"/>
+
+                    <TextView
+                        android:id="@+id/tvKayitOl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kaydol"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

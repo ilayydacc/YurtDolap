@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Uygulama paletin -->
+    <color name="palet_1_en_koyu">#B648CC</color>
+    <color name="palet_2_koyu_gri">#9D5A89</color>
+    <color name="palet_3_orta_gri">#B85095</color>
+    <color name="palet_4_acik_bej">#E759E7</color>
+    <color name="palet_5_pudra">#B79D9B</color>
+    <color name="palet_6_kahve">#51403D</color>
+
+    <!-- Tema renkleri -->
+    <color name="colorPrimary">#30333A</color>
+    <color name="colorPrimaryDark">#191A1D</color>
+    <color name="colorAccent">#B79D9B</color>
+
+    <color name="colorBackground">#30333A</color>
+
+    <!-- Gradient -->
+    <color name="bg_gradient_start">#30333A</color>
+    <color name="bg_gradient_end">#51403D</color>
+
+    <color name="btn_gradient_start">#B79D9B</color>
+    <color name="btn_gradient_end">#B0A6A7</color>
+
+    <!-- Glass -->
+    <color name="glass_background">#7267676F</color>
+    <color name="glass_stroke">#4DB79D9B</color>
+
+    <!-- Text -->
+    <color name="textPrimary">#EFEFEF</color>
+    <color name="textSecondary">#F299F2</color>
+    <color name="text_white">#EFEFEF</color>
+    <color name="text_hint">#823695</color>
+
+    <color name="input_background">#33DE7ECE</color>
+
+    <!-- Alt bar -->
+    <color name="alt_nav_renk">#7A4B6D</color>
+
+</resources>
