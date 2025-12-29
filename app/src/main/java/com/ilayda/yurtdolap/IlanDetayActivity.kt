@@ -33,7 +33,7 @@ class IlanDetayActivity : AppCompatActivity() {
 
         // Fiyatı "200 TL" formatında yaz
         tvFiyat.text = "$fiyat TL"
-
+        // DENEMEEEEE
         //  Resmi Göster (Glide ile)
         if (gorselUrl != null && gorselUrl.isNotEmpty()) {
             Glide.with(this)
