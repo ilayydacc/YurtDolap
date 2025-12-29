@@ -26,14 +26,14 @@ class IlanDetayActivity : AppCompatActivity() {
 
         val fiyat = intent.getIntExtra("fiyat", 0)
 
-//denemeee
+
         tvBaslik.text = baslik
         tvAciklama.text = aciklama
         tvSatici.text = "Satıcı: $satici"
 
         // Fiyatı "200 TL" formatında yaz
         tvFiyat.text = "$fiyat TL"
-        // DENEMEEEEE
+
         //  Resmi Göster (Glide ile)
         if (gorselUrl != null && gorselUrl.isNotEmpty()) {
             Glide.with(this)
