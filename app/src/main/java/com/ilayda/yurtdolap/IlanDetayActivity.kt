@@ -26,7 +26,7 @@ class IlanDetayActivity : AppCompatActivity() {
 
         val fiyat = intent.getIntExtra("fiyat", 0)
 
-
+//denemeee
         tvBaslik.text = baslik
         tvAciklama.text = aciklama
         tvSatici.text = "Satıcı: $satici"
