@@ -3,50 +3,76 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="96dp">
+    android:layout_height="96dp"
+    android:paddingBottom="8dp"
+    android:clipToPadding="false">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardAltBar"
         android:layout_width="0dp"
-        android:layout_height="72dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="12dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="10dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        app:cardCornerRadius="26dp"
+        app:cardElevation="12dp"
         app:cardUseCompatPadding="true"
         app:cardBackgroundColor="@color/alt_nav_renk"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNav"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            app:menu="@menu/menu_alt_nav"
-            app:labelVisibilityMode="labeled"
-            app:itemIconTint="@color/bnv_item_tint"
-            app:itemTextColor="@color/bnv_text_tint"
-            app:itemRippleColor="@android:color/transparent"
-            app:itemHorizontalTranslationEnabled="false"
-            app:itemPaddingTop="10dp"
-            app:itemPaddingBottom="8dp" />
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:clipToPadding="false">
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottomNav"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                app:menu="@menu/menu_alt_nav"
+                app:labelVisibilityMode="labeled"
+                app:itemHorizontalTranslationEnabled="false"
+                app:itemIconSize="22dp"
+                app:itemIconTint="@color/bnv_item_tint"
+                app:itemTextColor="@color/bnv_text_tint"
+                app:itemRippleColor="@android:color/transparent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- FAB’in barın içine oturması için küçük yuva -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/fabYuva"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                app:cardCornerRadius="32dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/alt_nav_renk"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabOrtaEkle"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:src="@android:drawable/ic_input_add"
+                app:tint="@android:color/white"
+                app:backgroundTint="@color/textSecondary"
+                app:borderWidth="0dp"
+                app:layout_constraintTop_toTopOf="@id/fabYuva"
+                app:layout_constraintBottom_toBottomOf="@id/fabYuva"
+                app:layout_constraintStart_toStartOf="@id/fabYuva"
+                app:layout_constraintEnd_toEndOf="@id/fabYuva"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabOrtaEkle"
-        android:layout_width="62dp"
-        android:layout_height="62dp"
-        android:src="@android:drawable/ic_input_add"
-        app:tint="@android:color/white"
-        app:backgroundTint="@color/colorAccent"
-        app:elevation="14dp"
-        app:layout_constraintStart_toStartOf="@id/cardAltBar"
-        app:layout_constraintEnd_toEndOf="@id/cardAltBar"
-        app:layout_constraintBottom_toTopOf="@id/cardAltBar"
-        android:layout_marginBottom="-20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

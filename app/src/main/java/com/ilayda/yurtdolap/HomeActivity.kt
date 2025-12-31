@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeActivity : AppCompatActivity() {
-//kkkk
+
     private lateinit var firestore: FirebaseFirestore
     private lateinit var recyclerView: RecyclerView
     private lateinit var ilanListesi: ArrayList<Ilan>

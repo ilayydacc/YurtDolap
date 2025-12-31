@@ -140,7 +140,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_ilan"/>
+        tools:listitem="@layout/item_ilan"
+        app:layout_constraintBottom_toTopOf="@id/altBar"
+        />
+
 
     <include
         android:id="@+id/altBar"

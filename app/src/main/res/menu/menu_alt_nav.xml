@@ -11,6 +11,13 @@
         android:icon="@android:drawable/ic_menu_send"
         android:title="Sohbet" />
 
+    <!-- ORTA BOŞLUK (FAB buraya gelecek) -->
+    <item
+        android:id="@+id/nav_bos"
+        android:enabled="false"
+        android:icon="@drawable/ic_bos"
+        android:title="" />
+
     <item
         android:id="@+id/nav_ilanlarim"
         android:icon="@android:drawable/ic_menu_agenda"
