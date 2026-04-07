@@ -1,0 +1,56 @@
+# Android / Gradle build artifacts
+*.apk
+*.aab
+*.aar
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+.gradle/
+.kotlin/
+build/
+*/build/
+.externalNativeBuild/
+.cxx/
+captures/
+.navigation/
+
+# Local machine config
+local.properties
+
+# IDE files
+.idea/
+*.iml
+*.iws
+.vscode/
+
+# Signing / secret files
+*.jks
+*.keystore
+google-services.json
+functions/.runtimeconfig.json
+functions/.env
+functions/.env.*
+
+# Node / Firebase
+functions/node_modules/
+.firebase/
+firebase-debug.log*
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Project root diagnostic outputs
+build*.txt
+build*.log
+compile_error*.txt
+debug_out.txt
+gradle_output*.txt
+
+# OS generated
+.DS_Store
+Thumbs.db

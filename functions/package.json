@@ -1,0 +1,16 @@
+{
+  "name": "yurtdolap-functions",
+  "private": true,
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "import:locations:dry-run": "node import-locations.js",
+    "import:locations": "node import-locations.js --apply"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^5.1.1"
+  }
+}
