@@ -98,7 +98,9 @@ class FirebaseUserRepositoryImpl @Inject constructor(
                     city = snapshot.getString("city") ?: "",
                     dormitory = snapshot.getString("dormitory") ?: "",
                     createdAt = snapshot.getLong("createdAt") ?: 0L,
-                    isAdmin = isAdmin
+                    isAdmin = isAdmin,
+                    sellerRatingAverage = snapshot.getDoubleValue("sellerRatingAverage"),
+                    sellerRatingCount = snapshot.getIntValue("sellerRatingCount")
                 )
             )
         } catch (e: Exception) {
@@ -127,5 +129,21 @@ class FirebaseUserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Resource.Error(e.localizedMessage ?: "Profil guncellenemedi")
         }
+    }
+}
+
+private fun com.google.firebase.firestore.DocumentSnapshot.getDoubleValue(field: String): Double {
+    return when (val value = get(field)) {
+        is Number -> value.toDouble()
+        is String -> value.toDoubleOrNull() ?: 0.0
+        else -> 0.0
+    }
+}
+
+private fun com.google.firebase.firestore.DocumentSnapshot.getIntValue(field: String): Int {
+    return when (val value = get(field)) {
+        is Number -> value.toInt()
+        is String -> value.toIntOrNull() ?: 0
+        else -> 0
     }
 }

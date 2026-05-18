@@ -55,6 +55,8 @@ fun ProductCard(
     location: String? = null,
     timeLabel: String? = null,
     deliveryLabel: String? = null,
+    sellerRatingLabel: String? = null,
+    rentalSummaryLabel: String? = null,
     onFavoriteClick: (() -> Unit)? = null,
     onClick: () -> Unit,
     onDeleteClick: (() -> Unit)? = null,
@@ -202,6 +204,26 @@ fun ProductCard(
                     )
                 }
 
+                if (!sellerRatingLabel.isNullOrBlank() || !rentalSummaryLabel.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        if (!sellerRatingLabel.isNullOrBlank()) {
+                            MetricChip(
+                                text = sellerRatingLabel,
+                                backgroundColor = PrimaryLilac.copy(alpha = 0.12f),
+                                textColor = PrimaryLilac
+                            )
+                        }
+                        if (!rentalSummaryLabel.isNullOrBlank()) {
+                            MetricChip(
+                                text = rentalSummaryLabel,
+                                backgroundColor = CtaGreen.copy(alpha = 0.12f),
+                                textColor = CtaGreen
+                            )
+                        }
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(8.dp))
                 HorizontalDivider(color = OutlineSoft.copy(alpha = 0.8f), thickness = 1.dp)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -323,6 +345,28 @@ private fun StatusChip(
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+        )
+    }
+}
+
+@Composable
+private fun MetricChip(
+    text: String,
+    backgroundColor: Color,
+    textColor: Color
+) {
+    Surface(
+        shape = RoundedCornerShape(10.dp),
+        color = backgroundColor
+    ) {
+        Text(
+            text = text,
+            color = textColor,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
         )
     }
 }

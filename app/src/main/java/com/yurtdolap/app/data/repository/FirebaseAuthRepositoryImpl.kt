@@ -59,7 +59,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     "city" to city,
                     "dormitory" to dormitory,
                     "createdAt" to System.currentTimeMillis(),
-                    "isAdmin" to false
+                    "isAdmin" to false,
+                    "sellerRatingAverage" to 0.0,
+                    "sellerRatingCount" to 0
                 )
                 firestore.collection("users").document(userId).set(userMap).await()
                 Resource.Success(Unit)

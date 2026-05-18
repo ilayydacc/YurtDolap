@@ -18,12 +18,15 @@ interface ChatRepository {
     // 2) Listen to all chat rooms a user is part of
     fun getUserChatRooms(): Flow<Resource<List<ChatRoom>>>
 
-    // 3) Listen to messages inside a specific room
+    // 3) Listen to a specific chat room
+    fun getChatRoom(chatId: String): Flow<Resource<ChatRoom>>
+
+    // 4) Listen to messages inside a specific room
     fun getChatMessages(chatId: String): Flow<Resource<List<Message>>>
 
-    // 4) Send a message
+    // 5) Send a message
     suspend fun sendMessage(chatId: String, text: String): Resource<Unit>
 
-    // 5) Delete a chat room and all messages inside it
+    // 6) Delete a chat room and all messages inside it
     suspend fun deleteChatRoom(chatId: String): Resource<Unit>
 }

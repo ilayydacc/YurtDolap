@@ -19,8 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yurtdolap.app.domain.model.Message
 import com.yurtdolap.app.presentation.designsystem.components.UIStateWrapper
+import com.yurtdolap.app.presentation.designsystem.components.YurtPrimaryButton
 import com.yurtdolap.app.presentation.designsystem.theme.BackgroundWhite
 import com.yurtdolap.app.presentation.designsystem.theme.PrimaryLilac
+import com.yurtdolap.app.presentation.designsystem.theme.SurfaceLight
 import com.yurtdolap.app.presentation.designsystem.theme.TextDarkPurple
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,8 +33,17 @@ fun ChatDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val messageText by viewModel.messageText.collectAsState()
+    val approvalState by viewModel.approvalState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.messageEvent.collect { message ->
+            snackbarHostState.showSnackbar(message)
+        }
+    }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text("Sohbet", color = TextDarkPurple, fontWeight = FontWeight.Bold) },
@@ -58,9 +69,14 @@ fun ChatDetailScreen(
                 .background(BackgroundWhite)
                 .padding(padding)
         ) {
+            TransactionApprovalPanel(
+                state = approvalState,
+                onApprove = viewModel::approveTransactionRequest
+            )
             UIStateWrapper(
                 state = uiState,
-                onRetry = { /* auto retries due to snapshot listener */ }
+                onRetry = { /* auto retries due to snapshot listener */ },
+                modifier = Modifier.weight(1f)
             ) { messages ->
                 if (messages.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -81,6 +97,46 @@ fun ChatDetailScreen(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TransactionApprovalPanel(
+    state: TransactionApprovalUiState,
+    onApprove: () -> Unit
+) {
+    if (!state.isVisible) return
+
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        color = SurfaceLight,
+        shape = RoundedCornerShape(12.dp),
+        tonalElevation = 1.dp
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Text(
+                text = if (state.isApproved) "Kiralama talebi onaylandi" else "Kiralama talebi bekliyor",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = TextDarkPurple
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "${state.buyerName}, ${state.productTitle} icin onay bekliyor.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextDarkPurple.copy(alpha = 0.72f)
+            )
+            if (!state.isApproved) {
+                Spacer(modifier = Modifier.height(10.dp))
+                YurtPrimaryButton(
+                    text = if (state.isApproving) "Onaylaniyor..." else "Kiralama Talebini Onayla",
+                    onClick = onApprove,
+                    enabled = !state.isApproving
+                )
             }
         }
     }

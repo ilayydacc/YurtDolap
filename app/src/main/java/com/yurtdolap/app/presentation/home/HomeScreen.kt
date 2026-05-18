@@ -49,6 +49,8 @@ import com.yurtdolap.app.domain.model.ProductTags
 import com.yurtdolap.app.domain.model.isNeedRequest
 import com.yurtdolap.app.presentation.designsystem.components.ProductCard
 import com.yurtdolap.app.presentation.designsystem.components.ProductCardSkeleton
+import com.yurtdolap.app.presentation.designsystem.components.rentalSummaryLabel
+import com.yurtdolap.app.presentation.designsystem.components.sellerRatingLabel
 import com.yurtdolap.app.presentation.designsystem.components.UIStateWrapper
 import com.yurtdolap.app.presentation.designsystem.components.YurtSecondaryButton
 import com.yurtdolap.app.presentation.designsystem.components.YurtTextField
@@ -176,6 +178,8 @@ fun HomeScreen(
                         location = product.dormitory,
                         timeLabel = "Bugun",
                         deliveryLabel = deliveryLabelFor(product),
+                        sellerRatingLabel = product.sellerRatingLabel(),
+                        rentalSummaryLabel = product.rentalSummaryLabel(),
                         onFavoriteClick = { viewModel.toggleFavorite(product.id) },
                         onClick = { onNavigateToDetail(product.id) }
                     )
@@ -427,6 +431,8 @@ private fun FeaturedCarouselSection(
                     location = product.dormitory,
                     timeLabel = "Bugun",
                     deliveryLabel = deliveryLabelFor(product),
+                    sellerRatingLabel = product.sellerRatingLabel(),
+                    rentalSummaryLabel = product.rentalSummaryLabel(),
                     onFavoriteClick = { onFavoriteClick(product.id) },
                     onClick = { onProductClick(product.id) }
                 )

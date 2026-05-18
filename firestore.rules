@@ -1,0 +1,169 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc(userId) {
+      return get(/databases/$(database)/documents/users/$(userId));
+    }
+
+    function isAdmin() {
+      return signedIn() && userDoc(request.auth.uid).data.isAdmin == true;
+    }
+
+    function isProductOwner() {
+      return signedIn() && resource.data.sellerId == request.auth.uid;
+    }
+
+    function creatingOwnProduct() {
+      return signedIn()
+        && request.resource.data.sellerId == request.auth.uid;
+    }
+
+    function ownerEditableProductFieldsOnly() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        'title',
+        'description',
+        'price',
+        'imageUrl',
+        'tag',
+        'categoryId',
+        'deliveryPreference',
+        'isAvailable'
+      ]);
+    }
+
+    function ratingOnlyProductUpdate() {
+      return signedIn()
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly([
+          'sellerRatingAverage',
+          'sellerRatingCount',
+          'rentalRatingAverage',
+          'rentalRatingCount',
+          'rentalCount',
+          'lastRentedAt'
+        ]);
+    }
+
+    function ownUserEditableFieldsOnly() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        'name',
+        'city',
+        'dormitory',
+        'favoriteProductIds',
+        'fcmToken'
+      ]);
+    }
+
+    function sellerAggregateOnlyUserUpdate() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        'sellerRatingAverage',
+        'sellerRatingCount'
+      ]);
+    }
+
+    match /users/{userId} {
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && userId == request.auth.uid
+        && request.resource.data.id == request.auth.uid;
+
+      allow update: if signedIn() && (
+        (userId == request.auth.uid && ownUserEditableFieldsOnly()) ||
+        (userId != request.auth.uid && sellerAggregateOnlyUserUpdate())
+      );
+
+      allow delete: if false;
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+
+      allow create: if creatingOwnProduct();
+
+      allow update: if signedIn() && (
+        ((isProductOwner() || isAdmin()) && ownerEditableProductFieldsOnly()) ||
+        ratingOnlyProductUpdate()
+      );
+
+      allow delete: if signedIn() && (isProductOwner() || isAdmin());
+
+      match /reviews/{reviewerId} {
+        allow read: if true;
+
+        allow create: if signedIn()
+          && reviewerId == request.auth.uid
+          && !exists(/databases/$(database)/documents/products/$(productId)/reviews/$(reviewerId))
+          && request.auth.uid != get(/databases/$(database)/documents/products/$(productId)).data.sellerId
+          && exists(/databases/$(database)/documents/products/$(productId)/transactions/$(reviewerId))
+          && get(/databases/$(database)/documents/products/$(productId)/transactions/$(reviewerId)).data.status == 'completed'
+          && request.resource.data.productId == productId
+          && request.resource.data.reviewerId == request.auth.uid
+          && request.resource.data.sellerId == get(/databases/$(database)/documents/products/$(productId)).data.sellerId
+          && request.resource.data.sellerRating is int
+          && request.resource.data.sellerRating >= 1
+          && request.resource.data.sellerRating <= 5;
+
+        allow update, delete: if false;
+      }
+
+      match /transactions/{buyerId} {
+        allow read: if signedIn();
+
+        allow create: if signedIn()
+          && buyerId == request.auth.uid
+          && request.auth.uid != get(/databases/$(database)/documents/products/$(productId)).data.sellerId
+          && request.resource.data.productId == productId
+          && request.resource.data.buyerId == request.auth.uid
+          && request.resource.data.sellerId == get(/databases/$(database)/documents/products/$(productId)).data.sellerId
+          && request.resource.data.status == 'requested';
+
+        allow update: if signedIn()
+          && resource.data.sellerId == request.auth.uid
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['status', 'completedAt'])
+          && resource.data.status == 'requested'
+          && request.resource.data.status == 'completed';
+
+        allow delete: if false;
+      }
+    }
+
+    match /chats/{chatId} {
+      allow read: if signedIn() && request.auth.uid in resource.data.participants;
+
+      allow create: if signedIn()
+        && request.auth.uid in request.resource.data.participants
+        && request.resource.data.participants.size() == 2;
+
+      allow update: if signedIn()
+        && request.auth.uid in resource.data.participants;
+
+      allow delete: if false;
+
+      match /messages/{messageId} {
+        allow read: if signedIn()
+          && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+
+        allow create: if signedIn()
+          && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants
+          && request.resource.data.senderId == request.auth.uid;
+
+        allow update, delete: if false;
+      }
+    }
+
+    match /cities/{cityId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /dormitories/{dormitoryId} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

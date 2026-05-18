@@ -14,8 +14,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yurtdolap.app.domain.model.Product
-import com.yurtdolap.app.domain.model.isNeedRequest
 import com.yurtdolap.app.presentation.designsystem.components.ProductCard
+import com.yurtdolap.app.presentation.designsystem.components.rentalSummaryLabel
+import com.yurtdolap.app.presentation.designsystem.components.sellerRatingLabel
 import com.yurtdolap.app.presentation.designsystem.components.UIStateWrapper
 import com.yurtdolap.app.presentation.designsystem.components.YurtTextField
 import com.yurtdolap.app.presentation.designsystem.theme.BackgroundWhite
@@ -77,6 +78,8 @@ fun SearchScreen(
                             tag = product.tag,
                             location = product.dormitory,
                             deliveryLabel = deliveryLabelFor(product),
+                            sellerRatingLabel = product.sellerRatingLabel(),
+                            rentalSummaryLabel = product.rentalSummaryLabel(),
                             onClick = { onNavigateToDetail(product.id) }
                         )
                     }

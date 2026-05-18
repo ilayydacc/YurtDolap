@@ -1,6 +1,6 @@
 package com.yurtdolap.app.presentation.navigation
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,27 +11,13 @@ import com.yurtdolap.app.presentation.auth.RegisterScreen
 @Composable
 fun RootNavigation(authRepository: AuthRepository) {
     val navController = rememberNavController()
-    
-    // Uygulama ilk açıldığında kontrol et
     val startDestination = if (authRepository.isUserAuthenticatedInFirebase) {
         "main_graph"
     } else {
-        "auth_graph"
+        "login"
     }
 
     NavHost(navController = navController, startDestination = startDestination) {
-        
-        // Auth Graph
-        composable("auth_graph") {
-            // Normalde nested graph da yapabilirdik, basit olsun diye route olarak verdik.
-            // Fakat login'i başlangıç rotası yapalım
-            LaunchedEffect(Unit) {
-                navController.navigate("login") {
-                    popUpTo("auth_graph") { inclusive = true }
-                }
-            }
-        }
-        
         composable("login") {
             LoginScreen(
                 onNavigateToRegister = {
@@ -44,7 +30,7 @@ fun RootNavigation(authRepository: AuthRepository) {
                 }
             )
         }
-        
+
         composable("register") {
             RegisterScreen(
                 onNavigateBackToLogin = {
@@ -59,11 +45,10 @@ fun RootNavigation(authRepository: AuthRepository) {
             )
         }
 
-        // Main App Graph (Bottom Bar vs olan)
         composable("main_graph") {
             MainScreen(
                 onSignOut = {
-                    navController.navigate("auth_graph") {
+                    navController.navigate("login") {
                         popUpTo("main_graph") { inclusive = true }
                     }
                 }

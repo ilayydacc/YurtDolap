@@ -7,5 +7,7 @@ data class UserProfileData(
     val city: String = "",
     val dormitory: String = "",
     val createdAt: Long = 0L,
-    val isAdmin: Boolean = false
+    val isAdmin: Boolean = false,
+    val sellerRatingAverage: Double = 0.0,
+    val sellerRatingCount: Int = 0
 )

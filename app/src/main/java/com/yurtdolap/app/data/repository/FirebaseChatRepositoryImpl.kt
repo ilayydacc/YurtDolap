@@ -114,6 +114,33 @@ class FirebaseChatRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getChatRoom(chatId: String): Flow<Resource<ChatRoom>> = callbackFlow {
+        if (chatId.isBlank()) {
+            trySend(Resource.Error("Sohbet bilgisi eksik"))
+            close()
+            return@callbackFlow
+        }
+
+        trySend(Resource.Loading())
+
+        val listener = chatsCollection.document(chatId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Resource.Error(error.localizedMessage ?: "Sohbet yuklenemedi"))
+                    return@addSnapshotListener
+                }
+
+                val room = snapshot?.toObject(ChatRoom::class.java)
+                if (room != null) {
+                    trySend(Resource.Success(room))
+                } else {
+                    trySend(Resource.Error("Sohbet bulunamadi"))
+                }
+            }
+
+        awaitClose { listener.remove() }
+    }
+
     override fun getChatMessages(chatId: String): Flow<Resource<List<Message>>> = callbackFlow {
         val currentUserId = auth.currentUser?.uid
         if (currentUserId == null) {
@@ -154,7 +181,12 @@ class FirebaseChatRepositoryImpl @Inject constructor(
         val currentUserId = auth.currentUser?.uid ?: return Resource.Error("Kullanici girisi yapilmadi")
 
         return try {
-            val messagesCollection = chatsCollection.document(chatId).collection("messages")
+            val chatDocument = chatsCollection.document(chatId)
+            val room = chatDocument.get().await().toObject(ChatRoom::class.java)
+            val participantsToRestore = room?.participants
+                ?.takeIf { it.isNotEmpty() }
+                ?: listOf(currentUserId)
+            val messagesCollection = chatDocument.collection("messages")
             val messageId = UUID.randomUUID().toString()
             val timestamp = System.currentTimeMillis()
 
@@ -167,11 +199,11 @@ class FirebaseChatRepositoryImpl @Inject constructor(
 
             messagesCollection.document(messageId).set(message).await()
 
-            chatsCollection.document(chatId).update(
+            chatDocument.update(
                 mapOf(
                     "lastMessage" to text,
                     "lastMessageTimestamp" to timestamp,
-                    "deletedForUserIds" to FieldValue.arrayRemove(currentUserId)
+                    "deletedForUserIds" to FieldValue.arrayRemove(*participantsToRestore.toTypedArray())
                 )
             ).await()
 
