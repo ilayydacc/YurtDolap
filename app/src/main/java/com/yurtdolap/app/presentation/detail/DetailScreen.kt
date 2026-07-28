@@ -77,6 +77,7 @@ private const val TurkishLira = "\u20BA"
 fun DetailScreen(
     onNavigateBack: () -> Unit,
     onNavigateToChat: (String) -> Unit = {},
+    onNavigateToPayment: (String) -> Unit = {},
     viewModel: DetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -131,6 +132,13 @@ fun DetailScreen(
 
             Column(modifier = Modifier.padding(20.dp)) {
                 ProductInfoCard(product = product)
+                if (!product.isNeedRequest() && currentUserId != product.sellerId) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    YurtPrimaryButton(
+                        text = "Test Odemeye Gec",
+                        onClick = { onNavigateToPayment(product.id) }
+                    )
+                }
                 if (product.description.isNotBlank()) {
                     Spacer(modifier = Modifier.height(16.dp))
                     ProductDescriptionCard(description = product.description)
@@ -148,6 +156,7 @@ fun DetailScreen(
                     currentUserId = currentUserId,
                     isSubmittingTransaction = isSubmittingTransaction,
                     onRequestTransaction = viewModel::requestTransaction,
+                    onStartPayment = { onNavigateToPayment(product.id) },
                     onCompleteTransaction = viewModel::completeTransaction
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -518,6 +527,7 @@ private fun TransactionSection(
     currentUserId: String?,
     isSubmittingTransaction: Boolean,
     onRequestTransaction: () -> Unit,
+    onStartPayment: () -> Unit,
     onCompleteTransaction: (String) -> Unit
 ) {
     if (product.isNeedRequest()) return
@@ -560,7 +570,8 @@ private fun TransactionSection(
                         BuyerTransactionStatus(
                             transaction = transactions.firstOrNull { it.buyerId == currentUserId },
                             isSubmittingTransaction = isSubmittingTransaction,
-                            onRequestTransaction = onRequestTransaction
+                            onRequestTransaction = onRequestTransaction,
+                            onStartPayment = onStartPayment
                         )
                     }
                 }
@@ -574,24 +585,50 @@ private fun TransactionSection(
 private fun BuyerTransactionStatus(
     transaction: ProductTransaction?,
     isSubmittingTransaction: Boolean,
-    onRequestTransaction: () -> Unit
+    onRequestTransaction: () -> Unit,
+    onStartPayment: () -> Unit
 ) {
     when {
         transaction == null -> {
             Text(
-                text = "Saticiya once islem talebi gonder. Satici talebi tamamlandi olarak isaretledikten sonra yorum birakabilirsin.",
+                text = "Test odeme ile gercek para cekmeden tanitim akisini deneyebilirsin. Basarili demo odemeden sonra satici islemi tamamlandi olarak isaretleyebilir.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextDarkPurple.copy(alpha = 0.74f)
             )
             Spacer(modifier = Modifier.height(12.dp))
             YurtPrimaryButton(
-                text = if (isSubmittingTransaction) "Gonderiliyor..." else "Islem Talebi Gonder",
+                text = "Test Odemeye Gec",
+                onClick = onStartPayment,
+                enabled = !isSubmittingTransaction
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            YurtSecondaryButton(
+                text = if (isSubmittingTransaction) "Gonderiliyor..." else "Sadece Islem Talebi Gonder",
                 onClick = onRequestTransaction,
                 enabled = !isSubmittingTransaction
             )
         }
         transaction.status == ProductTransactionStatus.COMPLETED -> {
             InfoNotice(text = "Islemin satici tarafindan tamamlandi olarak onaylandi. Artik degerlendirme birakabilirsin.")
+        }
+        transaction.status == ProductTransactionStatus.PAID -> {
+            InfoNotice(text = "Test odeme basarili gorunuyor. Satici teslimat sonrasi islemi tamamlandi olarak onayladiginda yorum acilacak.")
+        }
+        transaction.status == ProductTransactionStatus.PAYMENT_FAILED -> {
+            InfoNotice(text = "Son test odeme basarisiz oldu. Tekrar denemek icin odeme ekranina gecebilirsin.")
+            Spacer(modifier = Modifier.height(12.dp))
+            YurtPrimaryButton(
+                text = "Test Odemeyi Tekrar Dene",
+                onClick = onStartPayment
+            )
+        }
+        transaction.status == ProductTransactionStatus.REQUESTED -> {
+            InfoNotice(text = "Islem talebin saticiya iletildi. Tanitim icin test odeme adimini da gosterebilirsin.")
+            Spacer(modifier = Modifier.height(12.dp))
+            YurtPrimaryButton(
+                text = "Test Odemeye Gec",
+                onClick = onStartPayment
+            )
         }
         else -> {
             InfoNotice(text = "Islem talebin saticiya iletildi. Satici islemi tamamlandi diye onayladiginda yorum acilacak.")
@@ -634,10 +671,16 @@ private fun SellerTransactionManager(
                             Text(
                                 text = when (transaction.status) {
                                     ProductTransactionStatus.COMPLETED -> "Islem tamamlandi"
-                                    else -> "Onay bekliyor"
+                                    ProductTransactionStatus.PAID -> "Test odeme alindi"
+                                    ProductTransactionStatus.PAYMENT_FAILED -> "Test odeme basarisiz"
+                                    else -> "Odeme bekliyor"
                                 },
                                 style = MaterialTheme.typography.labelMedium,
-                                color = if (transaction.status == ProductTransactionStatus.COMPLETED) CtaGreen else PrimaryLilac
+                                color = when (transaction.status) {
+                                    ProductTransactionStatus.COMPLETED,
+                                    ProductTransactionStatus.PAID -> CtaGreen
+                                    else -> PrimaryLilac
+                                }
                             )
                         }
                         if (transaction.status == ProductTransactionStatus.COMPLETED) {
@@ -663,7 +706,9 @@ private fun SellerTransactionManager(
                         color = TextDarkPurple.copy(alpha = 0.68f)
                     )
 
-                    if (transaction.status != ProductTransactionStatus.COMPLETED) {
+                    if (transaction.status == ProductTransactionStatus.PAID ||
+                        transaction.status == ProductTransactionStatus.REQUESTED
+                    ) {
                         Spacer(modifier = Modifier.height(12.dp))
                         YurtSecondaryButton(
                             text = if (isSubmittingTransaction) "Isaretleniyor..." else "Islemi Tamamlandi Olarak Isaretle",

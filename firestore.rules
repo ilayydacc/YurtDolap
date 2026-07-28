@@ -120,13 +120,34 @@ service cloud.firestore {
           && request.resource.data.productId == productId
           && request.resource.data.buyerId == request.auth.uid
           && request.resource.data.sellerId == get(/databases/$(database)/documents/products/$(productId)).data.sellerId
-          && request.resource.data.status == 'requested';
+          && request.resource.data.status in ['requested', 'paid', 'payment_failed'];
 
         allow update: if signedIn()
-          && resource.data.sellerId == request.auth.uid
-          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['status', 'completedAt'])
-          && resource.data.status == 'requested'
-          && request.resource.data.status == 'completed';
+          && (
+            (
+              resource.data.sellerId == request.auth.uid
+              && request.resource.data.diff(resource.data).changedKeys().hasOnly(['status', 'completedAt'])
+              && resource.data.status in ['requested', 'paid']
+              && request.resource.data.status == 'completed'
+            ) ||
+            (
+              buyerId == request.auth.uid
+              && resource.data.buyerId == request.auth.uid
+              && request.resource.data.diff(resource.data).changedKeys().hasOnly([
+                'buyerName',
+                'status',
+                'paymentStatus',
+                'amount',
+                'currency',
+                'demoCardLast4',
+                'createdAt',
+                'paidAt',
+                'completedAt'
+              ])
+              && resource.data.status != 'completed'
+              && request.resource.data.status in ['paid', 'payment_failed']
+            )
+          );
 
         allow delete: if false;
       }

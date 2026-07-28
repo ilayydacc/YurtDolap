@@ -142,12 +142,14 @@ class ChatDetailViewModel @Inject constructor(
 
         val transaction = transactions.firstOrNull { it.buyerId == buyerId }
         _approvalState.value = when (transaction?.status) {
-            ProductTransactionStatus.REQUESTED -> TransactionApprovalUiState(
+            ProductTransactionStatus.REQUESTED,
+            ProductTransactionStatus.PAID -> TransactionApprovalUiState(
                 isVisible = true,
                 buyerId = buyerId,
                 buyerName = transaction.buyerName.ifBlank { "Alici" },
                 productTitle = currentProduct.title,
                 isApproved = false,
+                isPaid = transaction.status == ProductTransactionStatus.PAID,
                 isApproving = _approvalState.value.isApproving
             )
             ProductTransactionStatus.COMPLETED -> TransactionApprovalUiState(
@@ -214,5 +216,6 @@ data class TransactionApprovalUiState(
     val buyerName: String = "",
     val productTitle: String = "",
     val isApproved: Boolean = false,
+    val isPaid: Boolean = false,
     val isApproving: Boolean = false
 )

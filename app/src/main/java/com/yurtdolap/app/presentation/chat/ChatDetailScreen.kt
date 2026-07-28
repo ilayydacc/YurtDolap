@@ -119,21 +119,29 @@ private fun TransactionApprovalPanel(
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Text(
-                text = if (state.isApproved) "Kiralama talebi onaylandi" else "Kiralama talebi bekliyor",
+                text = when {
+                    state.isApproved -> "Islem tamamlandi"
+                    state.isPaid -> "Test odeme alindi"
+                    else -> "Kiralama talebi bekliyor"
+                },
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = TextDarkPurple
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "${state.buyerName}, ${state.productTitle} icin onay bekliyor.",
+                text = if (state.isPaid) {
+                    "${state.buyerName}, ${state.productTitle} icin demo odemeyi tamamladi."
+                } else {
+                    "${state.buyerName}, ${state.productTitle} icin onay bekliyor."
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextDarkPurple.copy(alpha = 0.72f)
             )
             if (!state.isApproved) {
                 Spacer(modifier = Modifier.height(10.dp))
                 YurtPrimaryButton(
-                    text = if (state.isApproving) "Onaylaniyor..." else "Kiralama Talebini Onayla",
+                    text = if (state.isApproving) "Onaylaniyor..." else "Islemi Tamamlandi Olarak Isaretle",
                     onClick = onApprove,
                     enabled = !state.isApproving
                 )

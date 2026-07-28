@@ -25,6 +25,7 @@ import com.yurtdolap.app.presentation.profile.ProfileScreen
 import com.yurtdolap.app.presentation.profile.EditProfileScreen
 import com.yurtdolap.app.presentation.chat.ChatDetailScreen
 import com.yurtdolap.app.presentation.edit.EditProductScreen
+import com.yurtdolap.app.presentation.payment.PaymentSimulationScreen
 
 @Composable
 fun MainScreen(onSignOut: () -> Unit) {
@@ -82,7 +83,18 @@ fun MainScreen(onSignOut: () -> Unit) {
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToChat = { chatId ->
                             navController.navigate("chat/$chatId")
+                        },
+                        onNavigateToPayment = { productId ->
+                            navController.navigate("payment_simulation/$productId")
                         }
+                    )
+                }
+                composable(
+                    route = "payment_simulation/{productId}",
+                    arguments = listOf(navArgument("productId") { type = NavType.StringType })
+                ) {
+                    PaymentSimulationScreen(
+                        onNavigateBack = { navController.popBackStack() }
                     )
                 }
                 composable(BottomNavItem.Favorites.route) { 

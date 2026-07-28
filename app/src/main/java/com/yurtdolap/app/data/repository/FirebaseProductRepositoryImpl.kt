@@ -8,10 +8,12 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.yurtdolap.app.domain.model.Product
+import com.yurtdolap.app.domain.model.ProductPaymentStatus
 import com.yurtdolap.app.domain.model.ProductReview
 import com.yurtdolap.app.domain.model.ProductTransaction
 import com.yurtdolap.app.domain.model.ProductTransactionStatus
 import com.yurtdolap.app.domain.model.isForRent
+import com.yurtdolap.app.domain.model.isNeedRequest
 import com.yurtdolap.app.domain.repository.ProductRepository
 import com.yurtdolap.app.domain.util.Resource
 import kotlinx.coroutines.channels.awaitClose
@@ -126,7 +128,11 @@ class FirebaseProductRepositoryImpl @Inject constructor(
                         buyerName = doc.getString("buyerName") ?: "",
                         sellerId = doc.getString("sellerId") ?: "",
                         status = doc.getString("status") ?: ProductTransactionStatus.REQUESTED,
+                        paymentStatus = doc.getString("paymentStatus") ?: ProductPaymentStatus.NOT_STARTED,
+                        amount = doc.getLong("amount") ?: 0L,
+                        currency = doc.getString("currency") ?: "TRY",
                         createdAt = doc.getLong("createdAt") ?: 0L,
+                        paidAt = doc.getLong("paidAt"),
                         completedAt = doc.getLong("completedAt")
                     )
                 } ?: emptyList()
@@ -248,6 +254,69 @@ class FirebaseProductRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun simulateProductPayment(
+        productId: String,
+        shouldSucceed: Boolean,
+        cardLast4: String
+    ): Resource<Product> {
+        val currentUserId = auth.currentUser?.uid ?: return Resource.Error("Kullanici girisi yapilmadi")
+
+        return try {
+            val productRef = productsCollection.document(productId)
+            val productSnapshot = productRef.get().await()
+            if (!productSnapshot.exists()) {
+                return Resource.Error("Urun bulunamadi")
+            }
+
+            val product = mapProduct(productSnapshot)
+            if (currentUserId == product.sellerId) {
+                return Resource.Error("Kendi ilanin icin odeme simulasyonu yapamazsin")
+            }
+            if (product.isNeedRequest()) {
+                return Resource.Error("Talep ilanlari icin odeme simulasyonu yok")
+            }
+
+            val buyerSnapshot = usersCollection.document(currentUserId).get().await()
+            val buyerName = buyerSnapshot.getString("name")
+                ?.takeIf { it.isNotBlank() }
+                ?: "YurtDolap Kullanici"
+            val now = System.currentTimeMillis()
+            val transactionRef = productRef.collection("transactions").document(currentUserId)
+            val status = if (shouldSucceed) {
+                ProductTransactionStatus.PAID
+            } else {
+                ProductTransactionStatus.PAYMENT_FAILED
+            }
+            val paymentStatus = if (shouldSucceed) {
+                ProductPaymentStatus.SIMULATED_SUCCESS
+            } else {
+                ProductPaymentStatus.SIMULATED_FAILED
+            }
+
+            transactionRef.set(
+                mapOf(
+                    "productId" to product.id,
+                    "buyerId" to currentUserId,
+                    "buyerName" to buyerName,
+                    "sellerId" to product.sellerId,
+                    "status" to status,
+                    "paymentStatus" to paymentStatus,
+                    "amount" to parsePriceToKurus(product.price),
+                    "currency" to "TRY",
+                    "demoCardLast4" to cardLast4,
+                    "createdAt" to now,
+                    "paidAt" to if (shouldSucceed) now else null,
+                    "completedAt" to null
+                ),
+                SetOptions.merge()
+            ).await()
+
+            Resource.Success(product)
+        } catch (e: Exception) {
+            Resource.Error(e.localizedMessage ?: "Odeme simulasyonu tamamlanamadi")
+        }
+    }
+
     override suspend fun completeProductTransaction(product: Product, buyerId: String): Resource<Unit> {
         val currentUserId = auth.currentUser?.uid ?: return Resource.Error("Kullanici girisi yapilmadi")
         if (currentUserId != product.sellerId) {
@@ -265,6 +334,10 @@ class FirebaseProductRepositoryImpl @Inject constructor(
             val snapshot = transactionRef.get().await()
             if (!snapshot.exists()) {
                 return Resource.Error("Tamamlanacak islem talebi bulunamadi")
+            }
+            val status = snapshot.getString("status")
+            if (status == ProductTransactionStatus.PAYMENT_FAILED) {
+                return Resource.Error("Basarisiz odeme simulasyonu tamamlanamaz")
             }
 
             transactionRef.update(
@@ -459,4 +532,14 @@ private fun DocumentSnapshot.getNullableIntValue(field: String): Int? {
         is String -> value.toIntOrNull()
         else -> null
     }
+}
+
+private fun parsePriceToKurus(raw: String): Long {
+    val normalized = raw
+        .replace("TL", "", ignoreCase = true)
+        .replace("\u20BA", "")
+        .replace(".", "")
+        .replace(",", ".")
+        .trim()
+    return ((normalized.toDoubleOrNull() ?: 0.0) * 100).toLong()
 }

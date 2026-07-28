@@ -16,6 +16,11 @@ interface ProductRepository {
     suspend fun uploadProductImage(imageBytes: ByteArray, fileName: String): Resource<String>
     suspend fun updateProduct(productId: String, updates: Map<String, Any>): Resource<Unit>
     suspend fun requestProductTransaction(product: Product): Resource<Unit>
+    suspend fun simulateProductPayment(
+        productId: String,
+        shouldSucceed: Boolean,
+        cardLast4: String
+    ): Resource<Product>
     suspend fun completeProductTransaction(product: Product, buyerId: String): Resource<Unit>
     suspend fun submitProductReview(
         product: Product,
