@@ -132,7 +132,7 @@ fun DetailScreen(
 
             Column(modifier = Modifier.padding(20.dp)) {
                 ProductInfoCard(product = product)
-                if (!product.isNeedRequest() && currentUserId != product.sellerId) {
+                if (!product.isNeedRequest() && currentUserId != null && currentUserId != product.sellerId) {
                     Spacer(modifier = Modifier.height(12.dp))
                     YurtPrimaryButton(
                         text = "Test Odemeye Gec",
@@ -443,7 +443,7 @@ private fun SellerTrustBlock(product: Product) {
                     if (product.hasSellerRating()) {
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "${formatRatingValue(product.sellerRatingAverage)} satici puani · ${product.sellerRatingCount} yorum",
+                            text = "${formatRatingValue(product.sellerRatingAverage)} satici puani - ${product.sellerRatingCount} yorum",
                             style = MaterialTheme.typography.labelLarge,
                             color = PrimaryLilac,
                             fontWeight = FontWeight.SemiBold
@@ -511,7 +511,7 @@ private fun RentalTrustBlock(product: Product) {
                     formatRelativeRentalTime(product.lastRentedAt)?.let(::add)
                 }
                 Text(
-                    text = metaParts.joinToString(" · "),
+                    text = metaParts.joinToString(" - "),
                     style = MaterialTheme.typography.bodyMedium,
                     color = TextDarkPurple.copy(alpha = 0.78f)
                 )
